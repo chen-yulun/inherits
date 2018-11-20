@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // ①以接收对象的方式
+        function create(o) {  // o是所要继承的父对象
+            function F() {};
+            F.prototype = o;
+            return new F();  // 返回一个实例对象
+        };
+        let a = {
+            name: 'better'
+        };
+        console.log(create(a).name);  // 'better'
+
+        // ②以拷贝对象属性的方式
+        function extend(Child, Parent) {   // Child, Parent都为构造函数
+            let c = Child.prototype;
+            let p = Parent.prototype;
+            for (let i in p) {
+                c[i] = p[i];
+            }
+        };
+
+        // 浅拷贝方式
+        function extendCopy(p) {   // p是被继承的对象
+            let c = {};
+            for (let i in p) {
+                c[i] = p[i];
+            }
+            return c;
+        };
+
+        // 深拷贝
+        function deepCopy(p, c) {  // c和p都是对象
+            c = c || {};
+            for (let i in p) {
+                if (p.hasOwnProperty[i]) {   // 排除继承属性
+                    if (typeof p[i] === 'object') {  // 解决引用类型
+                        c[i] = Array.isArray(p[i]) ? [] : {};
+                        deepCopy[p[i], c[i]];
+                    } else {
+                        c[i] = p[i];
+                    }
+                }
+            }
+            return c;
+        };
+
+        // ③拷贝多对象属性的方式
+        function multi() {
+            let n = {},
+            stuff,
+            j = 0,
+            len = arguments.length;
+            for (j = 0; j < len; j++) {
+                stuff = arguments[j];
+                for (let i in stuff) {
+                    if (stuff.hasOwnProperty(i)) {
+                        n[i] = stuff[i];
+                    }
+                }
+            }
+            return n
+        };
+
+        // ④吸收对象属性并扩展的方式
+        let parent = {
+            name: 'parent',
+            toString: function() {
+                return this.name;
+            }
+        };
+        function raise() {
+            let that = create(parent);  // 使用前面我们写过的create函数
+            that.other = 'Once in a blue moon!'; // 今天学的，丑显呗一下
+            return that;
+        }
+    </script>
+</body>
+</html>

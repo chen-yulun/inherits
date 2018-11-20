@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 构造函数A
+        function A() {
+            this.name = 'A';
+        };
+        A.prototype.say = function() {
+            return this.name;
+        };
+
+        // 之前定义的属性拷贝函数
+        function extend2(Child, Parent) {
+            let c = Child.prototype;
+            let p = Parent.prototype;
+            for (let i in p) {
+                c[i] = p[i];
+            }
+        };
+
+        // 构造函数D
+        function D() {
+            A.apply(this, arguments);  // 这里就相当于借用A构造函数把A中属性创建给了D，即name和say属性
+        };
+        extend2(D, A);  // 这里就直接把A原型的属性拷贝给了D原型
+
+        let d1 = new D();
+        console.log(d1.name);  // 'A'
+        console.log(d1.__proto__.name)  // undefined 这就说明了name属性是新建的，而不是继承得到的
+    </script>
+</body>
+</html>

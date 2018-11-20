@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 构造函数A
+        function A() {};
+        A.prototype.name = 'A';
+        A.prototype.say = function() {
+            return this.name;
+        };
+
+        // 构造函数B
+        function B() {};
+        B.prototype.name = 'B';
+
+        // 构造函数C
+        function C(width, height) {  // 此处的width和height属性是随参数变化的，所以就不需要改为共享属性
+            this.width = width;
+            this.height = height;
+        };
+        C.prototype.name = 'C';
+        C.prototype.getArea = function() {
+            return this.width * this.height;
+        };
+
+        B.prototype = A.prototype;
+        B.prototype.constructor = B;
+        C.prototype = B.prototype;
+        C.prototype.constructor = C;
+
+        let c2 = new C();
+        console.log(c2.say());  // 'A'
+    </script>
+</body>
+</html>
